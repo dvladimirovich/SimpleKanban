@@ -28,20 +28,13 @@
                 </button>
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">SimpleKanban</a>
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                </ul>
-            </div>
         </div>
     </div>
-    <div class="container body-content">
+    <div id="content" class="container body-content">
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2018 - SimpleKanban</p>
+            <p>&copy; @DateTime.Today.Year - SimpleKanban</p>
         </footer>
     </div>
 
@@ -59,6 +52,10 @@
                 asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
                 asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
         </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
+        <script src="~/js/app.jsx"></script>
+
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 

@@ -1,30 +1,67 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using SimpleKanban.DB.Abstract;
+using SimpleKanban.DB.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 
 namespace SimpleKanban.Controllers
 {
+    [Route("api/[controller]")]
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private IRepository<Card> context;
+
+        public HomeController(IRepository<Card> context)
         {
-            return View();
+            this.context = context;
         }
 
-        public IActionResult About()
+        [HttpGet]
+        public async Task<IEnumerable<Card>> Get()
         {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
+            return await context.GetAsync();
         }
 
-        public IActionResult Contact()
+        // GET: /Home/Cards/
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
-            ViewData["Message"] = "Your contact page.";
+            var query = await context.GetAsync();
+            return View(query.ToList());
+        }
 
-            return View();
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody]Card card)
+        {
+            card.Start = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, DateTime.Today.Hour, DateTime.Today.Minute, 0);
+            await context.CreateAsync(card);
+            return Ok(card);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit([FromBody]Card card)
+        {
+            Card entity = await context.FindByIdAsync(card.Id);
+            if (entity == null)
+            {
+                return NotFound();
+            }
+            await context.UpdateAsync(card);
+            return Ok(card);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            Card card = await context.FindByIdAsync(Convert.ToInt32(id));
+            if (card == null)
+            {
+                return NotFound();
+            }
+            await context.RemoveAsync(card);
+            return Ok(card);
         }
 
         public IActionResult Error()
