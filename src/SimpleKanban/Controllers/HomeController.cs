@@ -24,14 +24,6 @@ namespace SimpleKanban.Controllers
             return await context.GetAsync();
         }
 
-        // GET: /Home/Cards/
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var query = await context.GetAsync();
-            return View(query.ToList());
-        }
-
         [HttpPost]
         public async Task<IActionResult> Create([FromBody]Card card)
         {
